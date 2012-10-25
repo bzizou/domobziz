@@ -1,4 +1,6 @@
 #!/usr/bin/ruby
+# Simple command line to get the data from the status file
+# It's designed to be a feed for a graph tool like Cacti
 
 require "yaml"
 
