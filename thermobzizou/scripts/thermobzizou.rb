@@ -19,10 +19,12 @@ parity = SerialPort::NONE
 
 # Files
 t_file="/var/lib/thermobzizou/t.dat" # Contains the temperature to set
+r_file="/var/lib/thermobzizou/r.dat" # Contains the index of the ref temperature
 status_file="/var/lib/thermobzizou/status.yaml"
 
 # Ambiant temperature setpoint in centigrade degrees
 tcur='19' # Set default value here
+rcur='1'
 
 # Init serial port
 sp = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
@@ -46,6 +48,16 @@ while true do
     sleep(8)
     puts sp.read
   end   
+
+  # Set reference temperature
+  r=File.read(r_file).chomp.to_i
+    if r!=rcur
+    puts "Sending new ref temp #{r.to_s}"
+    sp.write("R0"+r.to_s)
+    rcur=r
+    sleep(8)
+    puts sp.read
+  end
 
   # Update status file
   sp.write("P")
